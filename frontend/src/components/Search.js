@@ -1,8 +1,8 @@
-import React from 'react'
-import { Container, Form, Row, Col, Button } from 'react-bootstrap'
+import React from 'react';
+import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 
 const Search = (propps) => {
-  const { handleSubmit, searchValue, setSearchValue } = propps
+  const { handleSubmit, searchValue, setSearchValue } = propps;
   return (
     <Container className="mt-4">
       <Row className="justify-content-center">
@@ -27,7 +27,7 @@ const Search = (propps) => {
         </Col>
       </Row>
     </Container>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;
