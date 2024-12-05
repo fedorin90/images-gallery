@@ -33,7 +33,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header title="Images Gallery" />
+      <Header />
       <Search
         searchValue={searchValue}
         setSearchValue={setSearchValue}
