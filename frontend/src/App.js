@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header';
 import Search from './components/Search';
 import ImageCard from './components/ImageCard';
+import Welcome from './components/Welcome';
 
 const UNSPLASH_KEY = process.env.REACT_APP_UNSPLASH_KEY;
 
@@ -33,20 +34,24 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header title="Images Gallery" />
       <Search
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         handleSubmit={handlerSearchSubmit}
       />
       <Container className="mt-4">
-        <Row xs={1} md={2} lg={3}>
-          {images.map((image) => (
-            <Col className="pb-3" key={image.id}>
-              <ImageCard image={image} deleteImage={handleDeleteImages} />
-            </Col>
-          ))}
-        </Row>
+        {images.length > 0 ? (
+          <Row xs={1} md={2} lg={3}>
+            {images.map((image) => (
+              <Col className="pb-3" key={image.id}>
+                <ImageCard image={image} deleteImage={handleDeleteImages} />
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <Welcome />
+        )}
       </Container>
     </div>
   );
