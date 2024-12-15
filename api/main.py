@@ -27,7 +27,7 @@ def new_image():
     headers = {"Accept-Version": "v1", "Authorization": f"Client-ID {UNSPLASH_KEY}"}
     params = {"query": search_value}
     response = requests.get(
-        url=UNSPLASH_URL, headers=headers, params=params, timeout=None
+        url=UNSPLASH_URL, headers=headers, params=params, timeout=10
     )
     return response.json()
 
