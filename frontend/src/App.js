@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header';
@@ -12,16 +13,14 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
   const [images, setImages] = useState([]);
 
-  const handlerSearchSubmit = (e) => {
+  const handlerSearchSubmit = async (e) => {
     e.preventDefault();
-    fetch(`${API_URL}/new-image?query=${searchValue}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setImages([{ ...data, title: searchValue }, ...images]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await axios.get(`${API_URL}/new-image?query=${searchValue}`);
+      setImages([{ ...res.data, title: searchValue }, ...images]);
+    } catch (error) {
+      console.log(error);
+    }
     setSearchValue('');
   };
 
