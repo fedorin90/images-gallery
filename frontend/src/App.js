@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,6 +12,18 @@ const API_URL = process.env.REAT_APP_API_URL || 'http://127.0.0.1:5050';
 function App() {
   const [searchValue, setSearchValue] = useState('');
   const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const getSavedImages = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/images`);
+        setImages(res.data || []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getSavedImages();
+  }, []);
 
   const handlerSearchSubmit = async (e) => {
     e.preventDefault();
