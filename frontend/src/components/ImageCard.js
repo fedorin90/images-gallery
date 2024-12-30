@@ -1,7 +1,7 @@
 import { Button, Card } from 'react-bootstrap';
 
 const ImageCard = (propps) => {
-  const { image, deleteImage } = propps;
+  const { image, deleteImage, saveImage } = propps;
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Img variant="top" src={image.urls.small} />
@@ -12,7 +12,12 @@ const ImageCard = (propps) => {
         <Card.Text>{image.description || image.alt_description}</Card.Text>
         <Button onClick={() => deleteImage(image.id)} variant="primary">
           Delete
-        </Button>
+        </Button>{' '}
+        {!image.isSaved && (
+          <Button onClick={() => saveImage(image.id)} variant="secondary">
+            Save
+          </Button>
+        )}
       </Card.Body>
     </Card>
   );
