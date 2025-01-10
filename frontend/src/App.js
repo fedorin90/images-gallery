@@ -6,18 +6,21 @@ import Header from './components/Header';
 import Search from './components/Search';
 import ImageCard from './components/ImageCard';
 import Welcome from './components/Welcome';
+import Spinner from './components/Spinner';
 
 const API_URL = process.env.REAT_APP_API_URL || 'http://127.0.0.1:5050';
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getSavedImages = async () => {
       try {
         const res = await axios.get(`${API_URL}/images`);
         setImages(res.data || []);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -67,28 +70,34 @@ function App() {
   return (
     <div className="App">
       <Header title="Images Gallery" />
-      <Search
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        handleSubmit={handlerSearchSubmit}
-      />
-      <Container className="mt-4">
-        {images.length > 0 ? (
-          <Row xs={1} md={2} lg={3}>
-            {images.map((image) => (
-              <Col className="pb-3" key={image.id}>
-                <ImageCard
-                  image={image}
-                  deleteImage={handleDeleteImages}
-                  saveImage={handleSaveImage}
-                />
-              </Col>
-            ))}
-          </Row>
-        ) : (
-          <Welcome />
-        )}
-      </Container>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <Search
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            handleSubmit={handlerSearchSubmit}
+          />
+          <Container className="mt-4">
+            {images.length > 0 ? (
+              <Row xs={1} md={2} lg={3}>
+                {images.map((image) => (
+                  <Col className="pb-3" key={image.id}>
+                    <ImageCard
+                      image={image}
+                      deleteImage={handleDeleteImages}
+                      saveImage={handleSaveImage}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <Welcome />
+            )}
+          </Container>
+        </>
+      )}
     </div>
   );
 }
