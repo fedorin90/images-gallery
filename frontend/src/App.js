@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header';
 import Search from './components/Search';
@@ -21,8 +22,9 @@ function App() {
         const res = await axios.get(`${API_URL}/images`);
         setImages(res.data || []);
         setLoading(false);
+        toast.success('Saved images successfully dowloaded');
       } catch (error) {
-        console.log(error);
+        toast.error(error.message);
       }
     };
     getSavedImages();
@@ -32,9 +34,15 @@ function App() {
     e.preventDefault();
     try {
       const res = await axios.get(`${API_URL}/new-image?query=${searchValue}`);
-      setImages([{ ...res.data, title: searchValue }, ...images]);
+      console.log(res);
+      if (res.data?.errors) {
+        toast.error("Image wasn't found. Please try one more time");
+      } else {
+        setImages([{ ...res.data, title: searchValue }, ...images]);
+        toast.info(`Image ${searchValue.toUpperCase()} was found`);
+      }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
     setSearchValue('');
   };
@@ -43,10 +51,13 @@ function App() {
     try {
       const res = await axios.delete(`${API_URL}/images/${id}`);
       if (res.data?.deleted_id) {
-        return setImages(images.filter((image) => image.id !== id));
+        toast.warn(
+          `Image ${images.find((image) => image.id === id).title.toUpperCase()} was deleted`,
+        );
+        setImages(images.filter((image) => image.id !== id));
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -61,9 +72,10 @@ function App() {
             image.id === id ? { ...image, isSaved: true } : image,
           ),
         );
+        toast.info(`Image ${imageToBeSaved.title.toUpperCase()} was saved`);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -98,6 +110,7 @@ function App() {
           </Container>
         </>
       )}
+      <ToastContainer position="bottom-right" />
     </div>
   );
 }
